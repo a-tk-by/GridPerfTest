@@ -1,6 +1,86 @@
-﻿namespace GridPerfTest;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using GridPerfTest.ViewModel;
+using Microsoft.Xaml.Behaviors;
 
-public class FillColumns
+namespace GridPerfTest;
+
+public sealed class FillColumns : Behavior<DataGrid>
 {
-    
+    public static readonly DependencyProperty ParametersCountProperty = 
+        DependencyProperty.Register(nameof(ParametersCount), typeof(int), typeof(FillColumns),
+            new FrameworkPropertyMetadata(AnyPropertyChanged) 
+        );
+
+    public static readonly DependencyProperty GenerateTemplatedColumnsProperty =
+        DependencyProperty.Register(nameof(GenerateTemplatedColumns), typeof(bool), typeof(FillColumns),
+            new FrameworkPropertyMetadata(AnyPropertyChanged)
+        );
+
+    private static void AnyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is FillColumns fillColumns)
+        {
+            fillColumns.Update();
+        }
+    }
+
+    public int ParametersCount
+    {
+        get => (int) GetValue(ParametersCountProperty);
+        set => SetValue(ParametersCountProperty, value);
+    }
+
+    public bool GenerateTemplatedColumns
+    {
+        get => (bool) GetValue(GenerateTemplatedColumnsProperty);
+        set => SetValue(GenerateTemplatedColumnsProperty, value);
+    }
+
+    protected override void OnAttached()
+    {
+        base.OnAttached();
+        Update();
+    }
+
+    private void Update()
+    {
+        if (AssociatedObject is null)
+        {
+            return;
+        }
+
+        
+        AssociatedObject.Columns.Clear();
+        
+        bool templated = GenerateTemplatedColumns;
+
+        for (int i = 0, n = ParametersCount; i < n; ++i)
+        {
+            var source = $"Value{i:00}";
+
+            AssociatedObject.Columns.Add(
+                templated
+                    ? new DataGridObjectColumn
+                    {
+                        Header = $"Templated {source}",
+                        Binding = new Binding(source) {Mode = BindingMode.OneWay},
+                    }
+                    : new DataGridTextColumn
+                    {
+                        Header = $"Plain {source}",
+                        Binding = new Binding(source + ".Value") {Mode = BindingMode.OneWay, StringFormat = "0.00##"}
+                    }
+            );
+        }
+    }
+
+    protected override void OnDetaching()
+    {
+        AssociatedObject.Columns.Clear();
+        base.OnDetaching();
+    }
 }
