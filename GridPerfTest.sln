@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridPerfTest.Wpf", "GridPerfTest.Wpf\GridPerfTest.Wpf.csproj", "{54303EFD-5F10-4005-B6BB-03A411C76BFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridPerfTest.ViewModel", "GridPerfTest.ViewModel\GridPerfTest.ViewModel.csproj", "{3A54A757-1015-4136-ACDD-8177CCF86177}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridPerfTest.Avalonia", "GridPerfTest.Avalonia\GridPerfTest.Avalonia.csproj", "{03F02B81-43E8-42A5-851A-81481A490706}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54303EFD-5F10-4005-B6BB-03A411C76BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54303EFD-5F10-4005-B6BB-03A411C76BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54303EFD-5F10-4005-B6BB-03A411C76BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54303EFD-5F10-4005-B6BB-03A411C76BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A54A757-1015-4136-ACDD-8177CCF86177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A54A757-1015-4136-ACDD-8177CCF86177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A54A757-1015-4136-ACDD-8177CCF86177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A54A757-1015-4136-ACDD-8177CCF86177}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03F02B81-43E8-42A5-851A-81481A490706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03F02B81-43E8-42A5-851A-81481A490706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03F02B81-43E8-42A5-851A-81481A490706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03F02B81-43E8-42A5-851A-81481A490706}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
