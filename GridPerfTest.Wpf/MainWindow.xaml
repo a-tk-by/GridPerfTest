@@ -19,6 +19,7 @@
       <TextBlock Text="{Binding Value, StringFormat={}{0:0.00##}}">
         <TextBlock.Style>
           <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black" />
             <Style.Triggers>
               <DataTrigger Binding="{Binding BelowNormal}" Value="True">
                 <Setter Property="Foreground" Value="DarkCyan" />
@@ -51,11 +52,13 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
           <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Button
           Command="{Binding StartAutoMeasurementsCommand}"
           Content="Start"
           Grid.Column="0"
+          Margin="2"
           Padding="10">
           <Button.Style>
             <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
@@ -71,6 +74,7 @@
           Command="{Binding StopAutoMeasurementsCommand}"
           Content="Stop"
           Grid.Column="1"
+          Margin="2"
           Padding="10">
           <Button.Style>
             <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
@@ -82,7 +86,28 @@
             </Style>
           </Button.Style>
         </Button>
+        <Button
+          Command="{Binding CollectResultsCommand}"
+          Content="Collect"
+          Grid.Column="2"
+          Margin="2"
+          Padding="10" />
       </Grid>
+      <TextBox
+        DockPanel.Dock="Top"
+        IsReadOnly="True"
+        Margin="2"
+        Text="{Binding CollectedResults}">
+        <TextBox.Style>
+          <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding CollectedResults}" Value="{x:Null}">
+                <Setter Property="Visibility" Value="Collapsed" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </TextBox.Style>
+      </TextBox>
       <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
         <ItemsControl ItemsSource="{Binding Pages}">
           <ItemsControl.ItemTemplate>
@@ -90,11 +115,18 @@
               <StackPanel>
                 <TextBlock FontWeight="Bold" Text="{Binding}" />
                 <TextBlock Text="{Binding Measurements.Count, StringFormat={}Number: {0}}" />
-                <TextBlock Text="{Binding AverageMeasurement, StringFormat={}Average: {0}}" />
+                <TextBlock Text="{Binding AverageMeasurement.TotalMilliseconds, StringFormat={}Average: {0:0}}" />
+                <TextBlock Text="{Binding MeasurementDeviation.TotalMilliseconds, StringFormat={}Deviation: {0:0.0}}" />
                 <ListBox
                   ItemsSource="{Binding Measurements}"
                   Margin="8,2,2,2"
-                  MaxHeight="100" />
+                  MaxHeight="100">
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding TotalMilliseconds, StringFormat={}{0:0}}" />
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
               </StackPanel>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
@@ -114,19 +146,18 @@
       </TabControl.ItemTemplate>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type vm:PerformanceTestPage}">
-          <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Text="{Binding ParametersForPage}" />
-            <DataGrid
-              AutoGenerateColumns="False"
-              CanUserSortColumns="False"
-              DataContext="{Binding}"
-              IsReadOnly="True"
-              ItemsSource="{Binding SourceItems}">
-              <b:Interaction.Behaviors>
-                <local:FillColumns GenerateTemplatedColumns="{Binding TemplatedColumns}" ParametersCount="{Binding ParametersForPage}" />
-              </b:Interaction.Behaviors>
-            </DataGrid>
-          </DockPanel>
+          <DataGrid
+            AutoGenerateColumns="False"
+            CanUserSortColumns="False"
+            DataContext="{Binding}"
+            EnableColumnVirtualization="True"
+            EnableRowVirtualization="True"
+            IsReadOnly="True"
+            ItemsSource="{Binding SourceItems}">
+            <b:Interaction.Behaviors>
+              <local:DataGridFillColumns GenerateTemplatedColumns="{Binding TemplatedColumns}" ParametersCount="{Binding ParametersForPage}" />
+            </b:Interaction.Behaviors>
+          </DataGrid>
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>

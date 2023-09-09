@@ -1,28 +1,25 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using GridPerfTest.ViewModel;
 using Microsoft.Xaml.Behaviors;
 
 namespace GridPerfTest;
 
-public sealed class FillColumns : Behavior<DataGrid>
+public sealed class DataGridFillColumns : Behavior<DataGrid>
 {
     public static readonly DependencyProperty ParametersCountProperty = 
-        DependencyProperty.Register(nameof(ParametersCount), typeof(int), typeof(FillColumns),
+        DependencyProperty.Register(nameof(ParametersCount), typeof(int), typeof(DataGridFillColumns),
             new FrameworkPropertyMetadata(AnyPropertyChanged) 
         );
 
     public static readonly DependencyProperty GenerateTemplatedColumnsProperty =
-        DependencyProperty.Register(nameof(GenerateTemplatedColumns), typeof(bool), typeof(FillColumns),
+        DependencyProperty.Register(nameof(GenerateTemplatedColumns), typeof(bool), typeof(DataGridFillColumns),
             new FrameworkPropertyMetadata(AnyPropertyChanged)
         );
 
     private static void AnyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is FillColumns fillColumns)
+        if (d is DataGridFillColumns fillColumns)
         {
             fillColumns.Update();
         }

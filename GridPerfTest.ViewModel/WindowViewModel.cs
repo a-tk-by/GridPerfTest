@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows.Input;
 
 namespace GridPerfTest.ViewModel;
@@ -56,9 +57,10 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         set => SetField(ref _autoMeasurementsIsRunning, value);
     }
 
+
     private bool _stopAutoMeasurements = false;
     private bool _autoMeasurementsIsRunning = false;
-    
+
     private async void StartAutoMeasurements()
     {
         if (AutoMeasurementsIsRunning)
@@ -67,6 +69,8 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         }
 
         AutoMeasurementsIsRunning = true;
+        CollectedResults = null;
+        
         try
         {
             _stopAutoMeasurements = false;
@@ -89,6 +93,7 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         finally
         {
             AutoMeasurementsIsRunning = false;
+            CollectResults();
         }
     }
 
@@ -97,6 +102,27 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         _stopAutoMeasurements = true;
     }
 
+
+    public ICommand CollectResultsCommand { get; }
+
+    private string? _collectedResults;
+
+    public string? CollectedResults
+    {
+        get => _collectedResults;
+        set => SetField(ref _collectedResults, value);
+    }
+
+    private void CollectResults()
+    {
+        CollectedResults = String.Join("\t",
+            Pages.SelectMany(static p => new[]
+            {
+                p.AverageMeasurement?.TotalMilliseconds.ToString("0") ?? "",
+                p.MeasurementDeviation?.TotalMilliseconds.ToString("0.0") ?? ""
+            }));
+    }
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
