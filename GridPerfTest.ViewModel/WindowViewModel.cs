@@ -21,6 +21,7 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         ResetMeasurementsCommand = new SimpleCommand(ResetMeasurements);
         StartAutoMeasurementsCommand = new SimpleCommand(StartAutoMeasurements);
         StopAutoMeasurementsCommand = new SimpleCommand(StopAutoMeasurements);
+        CollectResultsCommand = new SimpleCommand(CollectResults);
     }
 
     public SourceItem[] SourceData { get; }
@@ -118,8 +119,8 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         CollectedResults = String.Join("\t",
             Pages.SelectMany(static p => new[]
             {
-                p.AverageMeasurement?.TotalMilliseconds.ToString("0") ?? "",
-                p.MeasurementDeviation?.TotalMilliseconds.ToString("0.0") ?? ""
+                p.AverageMeasurement.TotalMilliseconds.ToString("0") ?? "",
+                p.MeasurementDeviation.TotalMilliseconds.ToString("0.0") ?? ""
             }));
     }
     

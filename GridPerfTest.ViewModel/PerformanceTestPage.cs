@@ -27,14 +27,14 @@ public sealed class PerformanceTestPage : INotifyPropertyChanged
 
     public ObservableCollection<TimeSpan> Measurements { get; } = new();
 
-    public TimeSpan? AverageMeasurement => Measurements.Count == 0 ? null : Measurements.Aggregate(default(TimeSpan), (a, b) => a + b) / Measurements.Count;
+    public TimeSpan AverageMeasurement => Measurements.Count == 0 ? TimeSpan.Zero : Measurements.Aggregate(default(TimeSpan), (a, b) => a + b) / Measurements.Count;
 
-    public TimeSpan? MeasurementDeviation => GetDeviation(Measurements);
+    public TimeSpan MeasurementDeviation => GetDeviation(Measurements);
 
-    private TimeSpan? GetDeviation(ObservableCollection<TimeSpan> measurements)
+    private TimeSpan GetDeviation(ObservableCollection<TimeSpan> measurements)
     {
         var n = measurements.Count;
-        if (n < 2) return null;
+        if (n < 2) return TimeSpan.Zero;
 
         var (s1, s2) = measurements.Select(x => x.TotalMilliseconds)
             .Select(x => (s1: x, s2: x * x))

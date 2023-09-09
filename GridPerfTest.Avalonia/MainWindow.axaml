@@ -1,9 +1,150 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="GridPerfTest.Avalonia.MainWindow"
-        Title="GridPerfTest.Avalonia">
-    Welcome to Avalonia!
+<Window
+  MinHeight="450"
+  MinWidth="800"
+  Title="GridPerfTest.Avalonia"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d"
+  x:Class="GridPerfTest.Avalonia.MainWindow"
+  x:CompileBindings="True"
+  x:DataType="vm:WindowViewModel"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+  xmlns:local="clr-namespace:GridPerfTest.Avalonia"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:system="using:System"
+  xmlns:vm="clr-namespace:GridPerfTest.ViewModel;assembly=GridPerfTest.ViewModel"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Window.DataContext>
+    <vm:WindowViewModel />
+  </Window.DataContext>
+  <Window.Styles>
+    <Style Selector="Button">
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Button.disabled">
+      <Setter Property="IsEnabled" Value="False" />
+    </Style>
+  </Window.Styles>
+  <Window.DataTemplates>
+    <DataTemplate DataType="{x:Type vm:ItemValue}">
+      <TextBlock
+        Classes.aboveNormal="{Binding AboveNormal}"
+        Classes.belowNormal="{Binding BelowNormal}"
+        Text="{Binding Value, StringFormat={}{0:0.00##}}">
+        <TextBlock.Styles>
+          <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="Black" />
+          </Style>
+          <Style Selector="TextBlock.aboveNormal">
+            <Setter Property="Foreground" Value="DarkOrange" />
+          </Style>
+          <Style Selector="TextBlock.belowNormal">
+            <Setter Property="Foreground" Value="DarkCyan" />
+          </Style>
+        </TextBlock.Styles>
+      </TextBlock>
+    </DataTemplate>
+  </Window.DataTemplates>
+  <Grid ColumnDefinitions="*,3*">
+    <DockPanel>
+      <Button
+        Command="{Binding ResetMeasurementsCommand}"
+        DockPanel.Dock="Top"
+        Margin="2"
+        Padding="10">
+        _Reset measurements
+      </Button>
+      <Grid DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Button
+          Classes.disabled="{Binding AutoMeasurementsIsRunning}"
+          Command="{Binding StartAutoMeasurementsCommand}"
+          Content="Start"
+          Grid.Column="0"
+          Margin="2"
+          Padding="10" />
+        <Button
+          Classes.disabled="{Binding !AutoMeasurementsIsRunning}"
+          Command="{Binding StopAutoMeasurementsCommand}"
+          Content="Stop"
+          Grid.Column="1"
+          Margin="2"
+          Padding="10" />
+        <Button
+          Command="{Binding CollectResultsCommand}"
+          Content="Collect"
+          Grid.Column="2"
+          Margin="2"
+          Padding="10" />
+      </Grid>
+      <TextBox
+        Classes.iEmpty="{Binding !CollectedResults}"
+        DockPanel.Dock="Top"
+        IsReadOnly="True"
+        Margin="2"
+        Text="{Binding CollectedResults}">
+        <TextBox.Styles>
+          <Style Selector="TextBox.isEmpty">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </TextBox.Styles>
+      </TextBox>
+      <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+        <ItemsControl ItemsSource="{Binding Pages}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type vm:PerformanceTestPage}">
+              <StackPanel>
+                <TextBlock FontWeight="Bold" Text="{Binding}" />
+                <TextBlock Text="{Binding Measurements.Count, StringFormat={}Number: {0}}" />
+                <TextBlock Text="{Binding AverageMeasurement.TotalMilliseconds, StringFormat={}Average: {0:0}}" />
+                <TextBlock Text="{Binding MeasurementDeviation.TotalMilliseconds, StringFormat={}Deviation: {0:0.0}}" />
+                <ListBox
+                  ItemsSource="{Binding Measurements}"
+                  Margin="8,2,2,2"
+                  MaxHeight="100">
+                  <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type system:TimeSpan}">
+                      <TextBlock Text="{Binding TotalMilliseconds, StringFormat={}{0:0}}" />
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </DockPanel>
+
+    <TabControl
+      Grid.Column="1"
+      ItemsSource="{Binding Pages, Mode=OneWay}"
+      SelectedItem="{Binding SelectedPage}"
+      SelectionChanged="Selector_OnSelectionChanged">
+      <TabControl.ItemTemplate>
+        <DataTemplate DataType="{x:Type vm:PerformanceTestPage}">
+          <TextBlock Text="{Binding}" />
+        </DataTemplate>
+      </TabControl.ItemTemplate>
+      <TabControl.ContentTemplate>
+        <DataTemplate DataType="{x:Type vm:PerformanceTestPage}">
+          <DataGrid
+            AutoGenerateColumns="False"
+            CanUserSortColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding SourceItems}">
+            <i:Interaction.Behaviors>
+              <local:DataGridFillColumns GenerateTemplatedColumns="{Binding TemplatedColumns}" ParametersCount="{Binding ParametersForPage}" />
+            </i:Interaction.Behaviors>
+          </DataGrid>
+        </DataTemplate>
+      </TabControl.ContentTemplate>
+    </TabControl>
+  </Grid>
 </Window>

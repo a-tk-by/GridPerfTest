@@ -1,7 +1,7 @@
 ﻿<Window
-  Height="450"
+  MinHeight="450"
+  MinWidth="800"
   Title="MainWindow"
-  Width="800"
   mc:Ignorable="d"
   x:Class="GridPerfTest.MainWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -149,7 +149,6 @@
           <DataGrid
             AutoGenerateColumns="False"
             CanUserSortColumns="False"
-            DataContext="{Binding}"
             EnableColumnVirtualization="True"
             EnableRowVirtualization="True"
             IsReadOnly="True"
