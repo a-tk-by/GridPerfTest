@@ -25,4 +25,8 @@
     <ItemGroup>
       <ProjectReference Include="..\GridPerfTest.ViewModel\GridPerfTest.ViewModel.csproj" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <PublishAot>true</PublishAot>
+    </PropertyGroup>
 </Project>
