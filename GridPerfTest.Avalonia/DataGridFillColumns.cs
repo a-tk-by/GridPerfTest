@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Xaml.Interactivity;
+using GridPerfTest.ViewModel;
 
 namespace GridPerfTest.Avalonia;
 
@@ -12,7 +13,7 @@ public class DataGridFillColumns : Behavior<DataGrid>
     
     private int _parametersCount;
     public static readonly DirectProperty<DataGridFillColumns, int> ParametersCountProperty = AvaloniaProperty.RegisterDirect<DataGridFillColumns, int>("ParametersCount", o => o.ParametersCount, (o, v) => o.ParametersCount = v);
-
+    
     public bool GenerateTemplatedColumns
     {
         get => _generateTemplatedColumns;
@@ -32,6 +33,13 @@ public class DataGridFillColumns : Behavior<DataGrid>
             Update();
         }
     }
+
+    public SourceItem[]? Source
+    {
+        get { throw new System.NotImplementedException(); }
+        set { throw new System.NotImplementedException(); }
+    }
+
 
     private void Update()
     {

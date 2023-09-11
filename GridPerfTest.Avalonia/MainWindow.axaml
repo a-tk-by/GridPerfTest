@@ -134,15 +134,23 @@
       </TabControl.ItemTemplate>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type vm:PerformanceTestPage}">
-          <DataGrid
-            AutoGenerateColumns="False"
-            CanUserSortColumns="False"
-            IsReadOnly="True"
-            ItemsSource="{Binding SourceItems}">
+          <!--  <DataGrid  -->
+          <!--  AutoGenerateColumns="False"  -->
+          <!--  CanUserSortColumns="False"  -->
+          <!--  IsReadOnly="True"  -->
+          <!--  ItemsSource="{Binding SourceItems}">  -->
+          <!--   <i:Interaction.Behaviors> -->
+          <!--     <local:DataGridFillColumns GenerateTemplatedColumns="{Binding TemplatedColumns}" ParametersCount="{Binding ParametersForPage}" /> -->
+          <!--   </i:Interaction.Behaviors> -->
+          <!-- </DataGrid> -->
+          <TreeDataGrid CanUserSortColumns="False">
             <i:Interaction.Behaviors>
-              <local:DataGridFillColumns GenerateTemplatedColumns="{Binding TemplatedColumns}" ParametersCount="{Binding ParametersForPage}" />
+              <local:TreeDataGridFillColumns
+                GenerateTemplatedColumns="{Binding TemplatedColumns}"
+                ParametersCount="{Binding ParametersForPage}"
+                Source="{Binding SourceItems}" />
             </i:Interaction.Behaviors>
-          </DataGrid>
+          </TreeDataGrid>
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>

@@ -76,7 +76,7 @@ public sealed class WindowViewModel : INotifyPropertyChanged
         {
             _stopAutoMeasurements = false;
             ResetMeasurements();
-            await Task.Delay(1_000);
+            await Task.Delay(500);
             for (int i = 0; i < 10; ++i)
             {
                 foreach (var page in Pages)
@@ -87,7 +87,7 @@ public sealed class WindowViewModel : INotifyPropertyChanged
                     }
 
                     SelectedPage = page;
-                    await Task.Delay(1_000);
+                    await Task.Delay(1000);
                 }
             }
         }
